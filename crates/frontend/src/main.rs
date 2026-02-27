@@ -1,13 +1,4 @@
-mod app;
-
-//use backend::packages::Packages;
-
-use {
-    cosmic::app::settings::Settings,
-    backend::packages::Packages,
-};
-
-use app::App;
+use backend::packages::Packages;
 
 fn main() {
     let mut packages = Packages::get().unwrap();
@@ -25,7 +16,4 @@ fn main() {
     backend::remove_empty_dirs().unwrap();
 
     println!("Unused data dirs: {:#?}", packages.get_unused_data_dirs().unwrap());
-
-    /*let settings = Settings::default();
-    cosmic::app::run::<App>(settings, ()).unwrap();*/
 }
