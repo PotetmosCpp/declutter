@@ -1,6 +1,11 @@
 use {
     crate::error::Error,
-    std::{env, fs, path::Path},
+    std::{
+        env,
+        fs,
+        path::Path,
+        io,
+    },
 };
 
 const DATA_DIRS: [&str; 4] = ["", ".config/", ".local/share/", ".local/state/"];
@@ -62,12 +67,22 @@ fn is_empty(path: &Path) -> Result<bool, Error> {
     }
 
     if path.is_dir() {
-        for entry in fs::read_dir(path)? {
-            let entry = entry?;
+        match fs::read_dir(path) {
+            Ok(path) => {
+                for entry in path {
+                    let entry = entry?;
 
-            if !is_empty(&entry.path())? {
-                return Ok(false);
-            }
+                    if !is_empty(&entry.path())? {
+                        return Ok(false)
+                    }
+                }
+            },
+            Err(error) => {
+                return match error.kind() {
+                    io::ErrorKind::PermissionDenied => Ok(false),
+                    _ => Err(Error::Io(error)),
+                }
+            },
         }
     }
 
