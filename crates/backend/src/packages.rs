@@ -43,7 +43,10 @@ impl Packages {
                             .map(|provides| Box::from(provides.name()))
                             .collect(),
                         package.files().files().iter()
-                            .map(|file| Box::from(str::from_utf8(file.name()).expect("this shouldnt happen")))
+                            //.map(|file| Box::from(str::from_utf8(file.name()).expect("this shouldnt happen")))
+                            .map(|file| Box::from(Path::new(
+                                &format!("/{}", str::from_utf8(file.name()).expect("utf8888888"))
+                            )))
                             .collect(),
                     )
                 })
@@ -113,6 +116,14 @@ impl Packages {
     pub fn find_desktop_entries(&mut self) -> Result<(), Error> {
         for package in self.iter_mut() {
             package.find_desktop_entries()?;
+        }
+
+        Ok(())
+    }
+
+    pub fn find_icon_paths(&mut self) -> Result<(), Error> {
+        for package in self.iter_mut() {
+            package.find_icon_paths()?;
         }
 
         Ok(())

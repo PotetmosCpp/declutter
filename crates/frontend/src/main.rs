@@ -6,6 +6,11 @@ fn main() {
     packages.find_data_paths().unwrap();
     packages.find_desktop_entries().unwrap();
 
+    packages.find_icon_paths().unwrap();
+
+    let package = &packages.explicit()[1];
+    println!("{:#?}", package);
+
     //println!("Explicit: {:#?}", packages.explicit());
     println!("Explicit:");
     packages.explicit().iter()
