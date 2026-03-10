@@ -25,6 +25,7 @@ pub struct Package {
                                 // should probably store as actual paths
     pub data_paths: Vec<Box<Path>>,
     pub visible_desktop_entries: Vec<DesktopEntry>,
+    // should find the "main" desktop entry
     pub icon_paths: Vec<Box<Path>>,
     pub best_icon_path: Option<Box<Path>>,
 }
