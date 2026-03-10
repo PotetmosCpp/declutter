@@ -5,3 +5,5 @@ edition = "2024"
 
 [dependencies]
 backend = { path = "../backend" }
+eframe = "0.33.3"
+egui_extras = { version = "0.33.3", features = ["file", "image", "svg"] }
