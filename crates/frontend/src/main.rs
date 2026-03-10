@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use eframe::{App, NativeOptions, egui::{self, CentralPanel, Image, ScrollArea, Vec2, include_image}};
 
 use backend::packages::Packages;
@@ -25,11 +27,10 @@ fn main() -> eframe::Result {
 
     let mut explicit: Vec<Package> = packages.explicit().iter()
         .map(|package| Package::new(
-                &package.name,
-                package.icon_paths.get(0).map(|icon_path| icon_path.to_str().unwrap()),
+            &package.name,
+            package.best_icon_path.as_deref().and_then(Path::to_str),
         ))
         .collect();
-        // should be sorted by if they have an icon or no
 
     explicit.sort_by_key(|x| x.icon_path.clone().is_none());
 

@@ -26,6 +26,7 @@ pub struct Package {
     pub data_paths: Vec<Box<Path>>,
     pub visible_desktop_entries: Vec<DesktopEntry>,
     pub icon_paths: Vec<Box<Path>>,
+    pub best_icon_path: Option<Box<Path>>,
 }
 
 impl Package {
@@ -47,6 +48,7 @@ impl Package {
             data_paths: Vec::new(),
             visible_desktop_entries: Vec::new(),
             icon_paths: Vec::new(),
+            best_icon_path: None,
         }
     }
 
@@ -98,7 +100,38 @@ impl Package {
                 }
             }
         }
+
+        if self.visible_desktop_entries.len() != 0 {
+            println!("{}", self.visible_desktop_entries.len());
+
+            for x in &self.visible_desktop_entries {
+            }
+        }
+
+        if self.visible_desktop_entries.len() > 1 {
+            println!("{}", self.name);
+        }
+
+        let sizes = [
+            "scalable",
+            "512x512",
+            "256x256",
+            "192x192",
+            "128x128",
+            "96x96",
+            "72x72",
+            "64x64",
+            "48x48",
+            "36x36",
+            "32x32",
+            "24x24",
+            "22x22",
+            "20x20",
+            "16x16",
+        ];
         
+        for icon_path in &self.icon_paths {
+        }
 
         Ok(())
     }
