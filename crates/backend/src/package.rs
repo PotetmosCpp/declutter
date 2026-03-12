@@ -1,11 +1,7 @@
 use {
-    std::{
-        path::Path,
-        fs,
-        ffi::OsStr,
-    },
-    freedesktop_file_parser::DesktopEntry,
-    crate::error::Error,
+    crate::error::Error, freedesktop_file_parser::DesktopEntry, std::{
+        ffi::OsStr, fs, path::{Path, PathBuf}
+    }
 };
 
 #[derive(Debug, PartialEq)]
@@ -55,7 +51,7 @@ impl Package {
 
     pub fn find_desktop_entries(&mut self) -> Result<(), Error> {
         for file in self.files.iter() {
-            if file.extension() == Some(OsStr::new("desktop")) && file.is_file() {
+            if file.extension() == Some(OsStr::new("desktop")) && file.is_file() && file.starts_with("/usr/share/applications") {
                 //println!("/{}", file);
 
                 if let Ok(desktop_file) = freedesktop_file_parser::parse(
@@ -67,11 +63,7 @@ impl Package {
                     if desktop_entry.no_display.is_none() || desktop_entry.no_display == Some(false) {
                         self.visible_desktop_entries.push(desktop_entry);
                     }
-                } else {
-                    //println!("/{} is fucked", file);
                 }
-            } else {
-                //println!("{:?}", file);
             }
         }
 
@@ -84,7 +76,8 @@ impl Package {
         {
             for file in self.files.iter() {
                 //println!("does {:?} start with {}?", file.file_name().unwrap(), icon);
-                if file.file_name().unwrap().to_str().unwrap().starts_with(icon) {  // two unwraps in one line nice
+                if file.starts_with("/usr/share/icons") &&
+                    file.file_name().unwrap().to_str().unwrap().starts_with(icon) {  // two unwraps in one line nice
                     const IMAGE_EXTENSIONS: [&str; 2] = [
                         "png",
                         "svg",
@@ -96,8 +89,6 @@ impl Package {
                             //println!("{:?} is possibly an icon", file);
                         }
                     }
-                } else {
-                    //println!("nooooooooo");
                 }
             }
         }
@@ -130,8 +121,20 @@ impl Package {
             "20x20",
             "16x16",
         ];
-        
-        for icon_path in &self.icon_paths {
+
+        if let Some(desktop_entry) = self.visible_desktop_entries.get(0) {  // just get the first one lollllll
+            if let Some(icon_name) = &desktop_entry.icon {
+                for icon_path in self.icon_paths.iter().map(|path| path.to_str().unwrap()) {
+                    for size in sizes {
+                                                                // i think it already does this
+                        if icon_path.contains(size) && icon_path.contains(&icon_name.content) {
+                                                                    // idk why this works
+                            self.best_icon_path = Some(Path::new(icon_path).into());
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         Ok(())
