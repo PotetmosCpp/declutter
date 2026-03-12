@@ -1,10 +1,12 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use eframe::{App, NativeOptions, egui::{self, CentralPanel, Image, RichText, ScrollArea, Vec2, include_image}};
 
 use backend::packages::Packages;
 
 fn main() -> eframe::Result {
+    // this code isnt supposed to be good btw i just wanted something that works
+
     let mut packages = Packages::get().unwrap();
 
     packages.find_data_paths().unwrap();
@@ -19,9 +21,10 @@ fn main() -> eframe::Result {
     //println!("Unneeded: {:#?}", packages.unneeded());
     //println!("Optional: {:#?}", packages.optional());
 
+    // should be a button for this
     backend::remove_empty_dirs().unwrap();
 
-    println!("Unused data dirs: {:#?}", packages.get_unused_data_dirs().unwrap());
+    //println!("Unused data dirs: {:#?}", packages.get_unused_data_dirs().unwrap());
 
     let options = NativeOptions::default();
 
@@ -33,6 +36,7 @@ fn main() -> eframe::Result {
         .collect();
     explicit.sort_by_key(|x| x.icon_path.clone().is_none());
 
+    // lollllllllllllllllllz repeoteitontionperjepreiroetieropnrne
     let mut unneeded: Vec<Package> = packages.unneeded().iter()
         .map(|package| Package::new(
             &package.name,
@@ -49,6 +53,8 @@ fn main() -> eframe::Result {
         .collect();
     optional.sort_by_key(|x| x.icon_path.clone().is_none());
 
+    let untracked_dirs = packages.get_unused_data_dirs().unwrap().iter().map(|dir| dir.to_path_buf()).collect();
+
 
     eframe::run_native(
         "declutter",
@@ -59,6 +65,7 @@ fn main() -> eframe::Result {
                 explicit,
                 unneeded,
                 optional,
+                untracked_dirs,
             }))
         }),
     )
@@ -82,6 +89,7 @@ struct Declutter {
     explicit: Vec<Package>,
     unneeded: Vec<Package>,
     optional: Vec<Package>,
+    untracked_dirs: Vec<PathBuf>,
 }
 
 impl App for Declutter {
@@ -99,6 +107,7 @@ impl App for Declutter {
                                     ));
                                 } else {
                                     ui.add(Image::new(
+                                        // this shouldnt be done
                                         include_image!("/usr/share/icons/Cosmic/scalable/apps/application-default.svg"),
                                     ));
                                 }
@@ -109,6 +118,7 @@ impl App for Declutter {
                     }
                 });
 
+                // here too loll
                 ui.label(RichText::new("Uneeded").size(50.0));
                 ui.horizontal_wrapped(|ui| {
                     for package in &self.unneeded {
@@ -146,6 +156,19 @@ impl App for Declutter {
                                 }
 
                                 ui.heading(&package.name);
+                            });
+                        });
+                    }
+                });
+
+                ui.label(RichText::new("Untracked folders").size(50.0));
+                ui.horizontal_wrapped(|ui| {
+                    for untracked_dir in &self.untracked_dirs {
+                        ui.allocate_ui(Vec2::new(100.0, 150.0), |ui| {
+                            ui.vertical_centered(|ui| {
+                                ui.image(include_image!("/usr/share/icons/Cosmic/scalable/mimetypes/inode-directory.svg"));
+
+                                ui.heading(&untracked_dir.to_str().unwrap()[10..]);
                             });
                         });
                     }

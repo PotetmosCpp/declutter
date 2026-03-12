@@ -1,6 +1,6 @@
 use {
     crate::error::Error, freedesktop_file_parser::DesktopEntry, std::{
-        ffi::OsStr, fs, path::{Path, PathBuf}
+        ffi::OsStr, fs, path::Path
     }
 };
 
@@ -19,6 +19,7 @@ pub struct Package {
     pub provides: Box<[Box<str>]>,
     pub files: Box<[Box<Path>]>, // maybe i just shouldnt store this here idk
                                 // should probably store as actual paths
+                                // idk what the comment above is supposed to mean
     pub data_paths: Vec<Box<Path>>,
     pub visible_desktop_entries: Vec<DesktopEntry>,
     // should find the "main" desktop entry
@@ -91,17 +92,6 @@ impl Package {
                     }
                 }
             }
-        }
-
-        if self.visible_desktop_entries.len() != 0 {
-            println!("{}", self.visible_desktop_entries.len());
-
-            for x in &self.visible_desktop_entries {
-            }
-        }
-
-        if self.visible_desktop_entries.len() > 1 {
-            println!("{}", self.name);
         }
 
         let sizes = [
