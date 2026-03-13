@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use eframe::{App, NativeOptions, egui::{self, CentralPanel, Image, RichText, ScrollArea, Vec2, include_image}};
+use eframe::{App, NativeOptions, egui::{self, CentralPanel, Image, RichText, ScrollArea, Vec2, ViewportBuilder, include_image}};
 
 use backend::packages::Packages;
 
@@ -26,7 +26,10 @@ fn main() -> eframe::Result {
 
     //println!("Unused data dirs: {:#?}", packages.get_unused_data_dirs().unwrap());
 
-    let options = NativeOptions::default();
+    let options = NativeOptions {
+        viewport: ViewportBuilder::default().with_app_id("Declutter"),
+        ..Default::default()
+    };
 
     let mut explicit: Vec<Package> = packages.explicit().iter()
         .map(|package| Package::new(
@@ -57,7 +60,7 @@ fn main() -> eframe::Result {
 
 
     eframe::run_native(
-        "declutter",
+        "Declutter",
         options,
         Box::new(|cc| {
             egui_extras::install_image_loaders(&cc.egui_ctx);
