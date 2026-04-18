@@ -12,6 +12,8 @@ THIS ISNT VIBE CODED!!!!!!!!
 ## stuff that could potentionally maybe be added at some point
 - support for more package managers (dkpg, the fedora one and more)
 - better frontend (GTK4?)
+- better backend (smarter app icon finder)
 - actions for uninstalling packages and removing folders directly in the app
 - showing diff from last run
 - ability to mark packages and folders so they get hidden
+- ...
