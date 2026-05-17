@@ -111,7 +111,7 @@ impl App for Declutter {
                                 } else {
                                     ui.add(Image::new(
                                         // this shouldnt be done
-                                        include_image!("/usr/share/icons/Cosmic/scalable/apps/application-default.svg"),
+                                        include_image!("/usr/share/icons/Adwaita/scalable/mimetypes/application-x-executable.svg"),
                                     ));
                                 }
 
@@ -133,7 +133,7 @@ impl App for Declutter {
                                     ));
                                 } else {
                                     ui.add(Image::new(
-                                        include_image!("/usr/share/icons/Cosmic/scalable/apps/application-default.svg"),
+                                        include_image!("/usr/share/icons/Adwaita/scalable/mimetypes/application-x-executable.svg"),
                                     ));
                                 }
 
@@ -154,7 +154,7 @@ impl App for Declutter {
                                     ));
                                 } else {
                                     ui.add(Image::new(
-                                        include_image!("/usr/share/icons/Cosmic/scalable/apps/application-default.svg"),
+                                        include_image!("/usr/share/icons/Adwaita/scalable/mimetypes/application-x-executable.svg"),
                                     ));
                                 }
 
@@ -169,7 +169,7 @@ impl App for Declutter {
                     for untracked_dir in &self.untracked_dirs {
                         ui.allocate_ui(Vec2::new(100.0, 150.0), |ui| {
                             ui.vertical_centered(|ui| {
-                                ui.image(include_image!("/usr/share/icons/Cosmic/scalable/mimetypes/inode-directory.svg"));
+                                ui.image(include_image!("/usr/share/icons/Adwaita/scalable/mimetypes/inode-directory.svg"));
 
                                 ui.heading(&untracked_dir.to_str().unwrap()[10..]);
                             });
